@@ -37,8 +37,6 @@ public class AdminController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        System.out.println(roleService.getAllRoles());
-        System.out.println(userService.getAllUsers());
         return "index";
 
     }
