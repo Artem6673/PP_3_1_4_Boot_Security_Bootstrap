@@ -50,7 +50,6 @@ public class UserDAOImpl implements UserDAO {
             roles.add(roleService.getRoleById(1));
             user.setRoles(roles) ;
         }
-        ;
         entityManager.persist(user);
     }
 

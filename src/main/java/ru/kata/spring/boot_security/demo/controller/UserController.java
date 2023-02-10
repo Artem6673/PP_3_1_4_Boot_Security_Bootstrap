@@ -20,11 +20,11 @@ public class UserController {
 
     @GetMapping()
     public String show(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        model.addAttribute("user",user);
+        model.addAttribute("authUser",authUser);
         model.addAttribute("users", userService.getAllUsers());
-        return "show";
+        return "user";
     }
 
 }

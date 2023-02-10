@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,47 +28,32 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("users", userService.getAllUsers());
-        return "show";
-    }
 
     @GetMapping()
     public String index(Model model) {
+        User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("authUser",authUser);
         model.addAttribute("users", userService.getAllUsers());
-        return "index";
-
-    }
-    @GetMapping("/new")
-    public String newUser(Model model){
-        model.addAttribute("user", new User());
         model.addAttribute("roles",roleService.getAllRoles());
-        model.addAttribute("users",userService.getAllUsers());
+        model.addAttribute("newUser",new User());
 
-        return "new";
+
+        return "admin";
 
     }
+
+
     @PostMapping
-    public String create(Model model, @ModelAttribute("user") User user, BindingResult bindingResult){
+    public String create(Model model, @ModelAttribute("newUser") User user, BindingResult bindingResult){
         userValidator.validate(user,bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "/new";
+            return "/admin";
         }
         userService.saveUser(user);
         model.addAttribute("users", userService.getAllUsers());
 
         return "redirect:/admin";
-
-    }
-    @GetMapping("/{id}/edit")
-    public String edit(Model model,@PathVariable("id") long id){
-        model.addAttribute("user",userService.getUserById(id));
-        model.addAttribute("roles",roleService.getAllRoles());
-        model.addAttribute("users", userService.getAllUsers());
-        return "edit";
 
     }
     @PatchMapping("/{id}")
