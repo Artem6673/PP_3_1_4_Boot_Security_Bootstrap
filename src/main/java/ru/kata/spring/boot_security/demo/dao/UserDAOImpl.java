@@ -41,14 +41,13 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
-
     @Override
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (user.getRoles() == null){
-            Set<Role> roles= new HashSet<>() ;
+        if (user.getRoles() == null) {
+            Set<Role> roles = new HashSet<>();
             roles.add(roleService.getRoleById(1));
-            user.setRoles(roles) ;
+            user.setRoles(roles);
         }
         entityManager.persist(user);
     }
@@ -64,4 +63,5 @@ public class UserDAOImpl implements UserDAO {
                 .setParameter("id", id)
                 .executeUpdate();
     }
+
 }
