@@ -54,6 +54,9 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateUser(Long id, User updateUser) {
+        if (!getUserById(id).getPassword().equals(updateUser.getPassword())) {
+            updateUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        }
         entityManager.merge(updateUser);
     }
 
